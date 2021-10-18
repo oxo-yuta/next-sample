@@ -1,6 +1,6 @@
 import Head from 'next/head'
 
-export default function Home() {
+export default function Home({stars}) {
   return (
     <div className="container">
       <Head>
@@ -10,7 +10,7 @@ export default function Home() {
 
       <main>
         <h1 className="title">
-          This is Next with SPA!
+          This page is Next with SSG
         </h1>
 
         <code>
@@ -20,6 +20,9 @@ export default function Home() {
         <div>
           <img src="https://media.giphy.com/media/Tfv9NNksOQvBuFiSb7/giphy.gif"></img>
         </div>
+
+        <div>Next stars: {stars}</div>
+
       </main>
 
       <style jsx>{`
@@ -169,4 +172,16 @@ export default function Home() {
       `}</style>
     </div>
   )
+}
+
+
+// この関数はビルド時に実行される
+export async function getStaticProps() {
+  // posts を取得するため外部 API endpoint を読み込む
+  const res = await fetch('https://api.github.com/repos/zeit/next.js')
+  const json = await res.json()
+  return { props: {
+      stars: json.stargazers_count
+    }
+  }
 }
